@@ -11,17 +11,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var weatherImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        setImage(weather: fetchWeatherCondition())
+        fetchWeatherCondition()
     }
     
-    public func fetchWeatherCondition() -> String {
+    public func fetchWeatherCondition() {
         let weather = YumemiWeather.fetchWeatherCondition()
-        return weather
+        setImage(weather: weather)
     }
 
-    @IBAction func fetchWeatherBtn(_ sender: Any) {
-        setImage(weather: fetchWeatherCondition())
+    @IBAction func didTapFetchWeatherButton(_ sender: Any) {
+        fetchWeatherCondition()
     }
+    
 }
 
 extension ViewController {
@@ -29,13 +30,15 @@ extension ViewController {
         switch weather {
         case "sunny":
             self.weatherImageView.tintColor = .red
+            self.weatherImageView.image = UIImage(named: "Sunny")
         case "cloudy":
             self.weatherImageView.tintColor = .gray
+            self.weatherImageView.image = UIImage(named: "Cloudy")
         case "rainy":
             self.weatherImageView.tintColor = .blue
+            self.weatherImageView.image = UIImage(named: "Rainy")
         default:
             return;
         }
-        self.weatherImageView.image = UIImage(named: weather)
     }
 }
