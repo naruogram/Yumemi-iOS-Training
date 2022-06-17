@@ -11,6 +11,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var weatherImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        setImage(weather: fetchWeatherCondition())
     }
     
     public func fetchWeatherCondition() -> String {
