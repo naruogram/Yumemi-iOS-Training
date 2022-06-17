@@ -27,13 +27,14 @@ extension ViewController {
     func setImage(weather: String) {
         switch weather {
         case "sunny":
-            self.weatherImageView.image = UIImage(named: "Sunny")
+            self.weatherImageView.tintColor = .red
         case "cloudy":
-            self.weatherImageView.image = UIImage(named: "Cloudy")
+            self.weatherImageView.tintColor = .gray
         case "rainy":
-            self.weatherImageView.image = UIImage(named: "Rainy")
+            self.weatherImageView.tintColor = .blue
         default:
-            self.weatherImageView.image = UIImage(named: "Sunny")
+            return;
         }
+        self.weatherImageView.image = UIImage(named: weather)
     }
 }
