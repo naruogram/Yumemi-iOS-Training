@@ -15,14 +15,26 @@ class ViewController: UIViewController {
     }
     
     public func fetchWeatherCondition() {
-        let weather = YumemiWeather.fetchWeatherCondition()
-        setImage(weather: weather)
+        do {
+            let weather = try YumemiWeather.fetchWeatherCondition(at: "tokyo")
+            setImage(weather: weather)
+        } catch {
+            presentErrorAlertDialog()
+        }
     }
-
+    
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {
         fetchWeatherCondition()
     }
     
+    func presentErrorAlertDialog() {
+        let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: "はい", style: .default)
+        let noAction = UIAlertAction(title: "いいえ", style: .destructive)
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 extension ViewController {
