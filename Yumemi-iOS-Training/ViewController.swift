@@ -7,6 +7,7 @@
 
 import UIKit
 import YumemiWeather
+
 class ViewController: UIViewController {
     @IBOutlet weak var weatherImageView: UIImageView!
     override func viewDidLoad() {
@@ -14,15 +15,25 @@ class ViewController: UIViewController {
         fetchWeatherCondition()
     }
     
-    public func fetchWeatherCondition() {
-        let weather = YumemiWeather.fetchWeatherCondition()
-        setImage(weather: Weather(rawValue: weather)!)
+    private func fetchWeatherCondition() {
+        do {
+            let weather = try YumemiWeather.fetchWeatherCondition(at: "tokyo")
+            setImage(weather: Weather(rawValue: weather)!)
+        } catch {
+            presentErrorAlertDialog()
+        }
     }
-
+    
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {
         fetchWeatherCondition()
     }
     
+    private func presentErrorAlertDialog() {
+        let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 extension ViewController {
