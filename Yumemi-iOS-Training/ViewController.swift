@@ -30,10 +30,8 @@ class ViewController: UIViewController {
     
     private func presentErrorAlertDialog() {
         let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
-        let yesAction = UIAlertAction(title: "はい", style: .default)
-        let noAction = UIAlertAction(title: "いいえ", style: .destructive)
-        alert.addAction(yesAction)
-        alert.addAction(noAction)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
 }
