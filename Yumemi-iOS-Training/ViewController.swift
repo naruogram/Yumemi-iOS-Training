@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     private func fetchWeatherCondition() {
         do {
             let weather = try YumemiWeather.fetchWeatherCondition(at: "tokyo")
-            setImage(weather: weather)
+            setImage(weather: Weather(rawValue: weather)!)
         } catch {
             presentErrorAlertDialog()
         }
@@ -39,19 +39,17 @@ class ViewController: UIViewController {
 }
 
 extension ViewController {
-    func setImage(weather: String) {
+    func setImage(weather: Weather) {
         switch weather {
-        case "sunny":
-            self.weatherImageView.tintColor = .red
-            self.weatherImageView.image = UIImage(named: "Sunny")
-        case "cloudy":
-            self.weatherImageView.tintColor = .gray
-            self.weatherImageView.image = UIImage(named: "Cloudy")
-        case "rainy":
-            self.weatherImageView.tintColor = .blue
-            self.weatherImageView.image = UIImage(named: "Rainy")
-        default:
-            return;
+        case .sunny:
+            weatherImageView.tintColor = .red
+            weatherImageView.image = UIImage(named: "Sunny")
+        case .cloudy:
+            weatherImageView.tintColor = .gray
+            weatherImageView.image = UIImage(named: "Cloudy")
+        case .rainy:
+            weatherImageView.tintColor = .blue
+            weatherImageView.image = UIImage(named: "Rainy")
         }
     }
 }
