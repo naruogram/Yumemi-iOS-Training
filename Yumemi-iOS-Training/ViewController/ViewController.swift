@@ -9,6 +9,9 @@ import UIKit
 import YumemiWeather
 
 class ViewController: UIViewController {
+    let weatherModel = WeatherModel()
+    @IBOutlet weak var lowTempLabel: UILabel!
+    @IBOutlet weak var highTempLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,12 +19,16 @@ class ViewController: UIViewController {
     }
     
     private func fetchWeatherCondition() {
-        do {
-            let weather = try YumemiWeather.fetchWeatherCondition(at: "tokyo")
-            setImage(weather: Weather(rawValue: weather)!)
-        } catch {
-            presentErrorAlertDialog()
+        guard let weather = try? weatherModel.fetchWeather(area: "tokyo", date: Date()) else{
+           return presentErrorAlertDialog()
         }
+        handleWeather(weather: weather)
+    }
+    
+    private func handleWeather(weather: Response){
+        lowTempLabel.text = weather.minTemp.description
+        highTempLabel.text = weather.maxTemp.description
+        setImage(weather: weather.weather)
     }
     
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {

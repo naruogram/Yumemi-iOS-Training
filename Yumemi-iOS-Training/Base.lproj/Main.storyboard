@@ -83,6 +83,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="highTempLabel" destination="f61-Xv-ICr" id="ViK-Tr-e28"/>
+                        <outlet property="lowTempLabel" destination="k36-MU-blM" id="s8S-NO-fjx"/>
                         <outlet property="weatherImageView" destination="rni-2w-aom" id="7CL-Eh-G1o"/>
                     </connections>
                 </viewController>
