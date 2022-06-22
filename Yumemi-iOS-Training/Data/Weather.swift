@@ -7,20 +7,8 @@
 
 import Foundation
 
-enum Weather: String, Codable
-{
-    case sunny
-    case cloudy
-    case rainy
-    
-    func toUpperCaseFirstLetter() -> String {
-        switch self {
-        case .sunny:
-            return "Sunny"
-        case .cloudy:
-            return "Cloudy"
-        case .rainy:
-            return "Rainy"
-        }
-    }
+enum Weather: String ,Codable{
+    case sunny = "sunny"
+    case cloudy = "cloudy"
+    case rainy = "rainy"
 }

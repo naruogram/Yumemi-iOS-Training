@@ -30,12 +30,14 @@ struct WeatherModel {
         
         let request = Request(area: area, date: date)
         
-        let jsonString = try? jsonString(request: request)
-        
-        let responseJson = try? YumemiWeather.fetchWeather(jsonString!)
-        
-        let response = try response(response: responseJson!)
-        
-        return response
+        do {
+            let jsonString = try jsonString(request: request)
+            let responseJson = try YumemiWeather.fetchWeather(jsonString)
+            let response = try response(response: responseJson)
+            return response
+        }
+        catch{
+                  throw error
+        }
     }
 }
