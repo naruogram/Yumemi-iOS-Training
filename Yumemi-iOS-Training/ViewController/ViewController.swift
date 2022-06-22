@@ -48,13 +48,11 @@ extension ViewController {
         switch weather {
         case .sunny:
             weatherImageView.tintColor = .red
-            weatherImageView.image = UIImage(named: "Sunny")
         case .cloudy:
             weatherImageView.tintColor = .gray
-            weatherImageView.image = UIImage(named: "Cloudy")
         case .rainy:
             weatherImageView.tintColor = .blue
-            weatherImageView.image = UIImage(named: "Rainy")
         }
+        weatherImageView.image = UIImage(named: weather.toUpperCaseFirstLetter())
     }
 }

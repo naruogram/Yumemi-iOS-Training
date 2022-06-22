@@ -8,7 +8,8 @@
 import Foundation
 import YumemiWeather
 
-class WeatherModel {
+struct WeatherModel {
+    let dateUtils = DateUtils()
     
     func jsonString(request: Request) throws -> String{
         let encoder = JSONEncoder()
@@ -25,7 +26,7 @@ class WeatherModel {
     }
     
     func fetchWeather(area: String,date:Date) throws -> Response {
-        let date = DateUtils.stringFromDate(date: date, format:"yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+        let date = dateUtils.stringFromDate(date: date, format:"yyyy-MM-dd'T'HH:mm:ssZZZZZ")
         
         let request = Request(area: area, date: date)
         

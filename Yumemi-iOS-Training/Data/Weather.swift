@@ -12,4 +12,15 @@ enum Weather: String, Codable
     case sunny
     case cloudy
     case rainy
+    
+    func toUpperCaseFirstLetter() -> String {
+        switch self {
+        case .sunny:
+            return "Sunny"
+        case .cloudy:
+            return "Cloudy"
+        case .rainy:
+            return "Rainy"
+        }
+    }
 }
