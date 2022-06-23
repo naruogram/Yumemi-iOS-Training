@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum Weather: String ,Codable{
-    case sunny = "sunny"
-    case cloudy = "cloudy"
-    case rainy = "rainy"
+enum WeatherCondition: String ,Codable{
+    case sunny
+    case cloudy
+    case rainy
 }

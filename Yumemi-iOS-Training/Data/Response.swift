@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Response: Codable {
-    let weather: Weather
+struct WeatherResponse: Codable {
+    let weatherCondition: WeatherCondition
     let maxTemp: Int
     let minTemp: Int
-    let date: String
+    let date: Date
     
     enum CodingKeys: String, CodingKey {
-        case weather = "weather_condition"
+        case weatherCondition = "weather_condition"
         case maxTemp = "max_temperature"
         case minTemp = "min_temperature"
         case date

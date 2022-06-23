@@ -9,35 +9,37 @@ import Foundation
 import YumemiWeather
 
 struct WeatherModel {
-    let dateUtils = DateUtils()
-    
-    func jsonString(request: Request) throws -> String{
-        let encoder = JSONEncoder()
-        let requestJsonValue = try? encoder.encode(request)
-        let requestJsonString = String(bytes: requestJsonValue!, encoding: .utf8)
-        return requestJsonString!
+    private var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        return dateFormatter
     }
     
-    func response(response: String) throws -> Response {
+    func jsonString(request: WeatherRequest) throws -> String{
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        let requestJsonValue = try encoder.encode(request)
+        guard let requestJsonString = String(bytes: requestJsonValue, encoding: .utf8) else{
+            throw WeatherError.jsonEncodeError
+        }
+        return requestJsonString
+    }
+    
+    func response(response: String) throws -> WeatherResponse {
+        guard let responseData = response.data(using: .utf8) else{
+            throw WeatherError.jsonDecodeError
+        }
         let decoder = JSONDecoder()
-        let responseData = response.data(using: .utf8)
-        let responseResult: Response = try decoder.decode(Response.self, from: responseData!)
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        let responseResult: WeatherResponse = try decoder.decode(WeatherResponse.self, from: responseData)
         return responseResult
     }
     
-    func fetchWeather(area: String,date:Date) throws -> Response {
-        let date = dateUtils.stringFromDate(date: date, format:"yyyy-MM-dd'T'HH:mm:ssZZZZZ")
-        
-        let request = Request(area: area, date: date)
-        
-        do {
-            let jsonString = try jsonString(request: request)
-            let responseJson = try YumemiWeather.fetchWeather(jsonString)
-            let response = try response(response: responseJson)
-            return response
-        }
-        catch{
-                  throw error
-        }
+    func fetchWeather(area: String, date: Date) throws -> WeatherResponse {
+        let request = WeatherRequest(area: area, date: date)
+        let jsonString = try jsonString(request: request)
+        let responseJson = try YumemiWeather.fetchWeather(jsonString)
+        let response = try response(response: responseJson)
+        return response
     }
 }
