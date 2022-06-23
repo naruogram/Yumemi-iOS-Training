@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func didTapBackPreviousPage(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     private func presentErrorAlertDialog() {
