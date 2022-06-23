@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var maxTempLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -43,6 +44,10 @@ class ViewController: UIViewController {
     
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {
         fetchWeather()
+    }
+    
+    @IBAction func didTapBackPreviousPage(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     private func presentErrorAlertDialog() {
