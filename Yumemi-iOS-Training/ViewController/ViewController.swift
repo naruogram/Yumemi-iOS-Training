@@ -9,23 +9,40 @@ import UIKit
 import YumemiWeather
 
 class ViewController: UIViewController {
+    
+    let weatherModel = WeatherModel()
+    
+    @IBOutlet weak var minTempLabel: UILabel!
+    @IBOutlet weak var maxTempLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchWeatherCondition()
     }
     
-    private func fetchWeatherCondition() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchWeather()
+    }
+    
+    private func fetchWeather() {
         do {
-            let weather = try YumemiWeather.fetchWeatherCondition(at: "tokyo")
-            setImage(weather: Weather(rawValue: weather)!)
-        } catch {
+            let weather = try weatherModel.fetchWeather(area: "tokyo", date: Date())
+            handleWeather(weather: weather)
+        }
+        catch {
             presentErrorAlertDialog()
         }
     }
     
+    private func handleWeather(weather: WeatherResponse) {
+        minTempLabel.text = weather.minTemp.description
+        maxTempLabel.text = weather.maxTemp.description
+        setImage(weatherCondition: weather.weatherCondition)
+    }
+    
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {
-        fetchWeatherCondition()
+        fetchWeather()
     }
     
     private func presentErrorAlertDialog() {
@@ -37,17 +54,21 @@ class ViewController: UIViewController {
 }
 
 extension ViewController {
-    func setImage(weather: Weather) {
-        switch weather {
+    func setImage(weatherCondition: WeatherCondition) {
+        switch weatherCondition {
         case .sunny:
             weatherImageView.tintColor = .red
-            weatherImageView.image = UIImage(named: "Sunny")
         case .cloudy:
             weatherImageView.tintColor = .gray
-            weatherImageView.image = UIImage(named: "Cloudy")
         case .rainy:
             weatherImageView.tintColor = .blue
-            weatherImageView.image = UIImage(named: "Rainy")
         }
+        weatherImageView.image = UIImage(named: weatherCondition.iconName)
+    }
+}
+
+extension WeatherCondition {
+    var iconName: String {
+        rawValue.capitalized
     }
 }
