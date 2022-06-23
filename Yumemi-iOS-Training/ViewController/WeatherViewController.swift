@@ -8,18 +8,13 @@
 import UIKit
 import YumemiWeather
 
-class ViewController: UIViewController {
+class WeatherViewController: UIViewController {
     
     let weatherModel = WeatherModel()
     
     @IBOutlet weak var minTempLabel: UILabel!
     @IBOutlet weak var maxTempLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,7 +41,7 @@ class ViewController: UIViewController {
         fetchWeather()
     }
     
-    @IBAction func didTapBackPreviousPage(_ sender: Any) {
+    @IBAction func didTapCloseButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
@@ -58,7 +53,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension WeatherViewController {
     func setImage(weatherCondition: WeatherCondition) {
         switch weatherCondition {
         case .sunny:
