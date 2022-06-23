@@ -9,10 +9,13 @@ import UIKit
 import YumemiWeather
 
 class ViewController: UIViewController {
+    
     let weatherModel = WeatherModel()
+    
     @IBOutlet weak var minTempLabel: UILabel!
     @IBOutlet weak var maxTempLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -23,16 +26,16 @@ class ViewController: UIViewController {
     }
     
     private func fetchWeather() {
-        do{
+        do {
             let weather = try weatherModel.fetchWeather(area: "tokyo", date: Date())
             handleWeather(weather: weather)
         }
-        catch{
+        catch {
             presentErrorAlertDialog()
         }
     }
     
-    private func handleWeather(weather: WeatherResponse){
+    private func handleWeather(weather: WeatherResponse) {
         minTempLabel.text = weather.minTemp.description
         maxTempLabel.text = weather.maxTemp.description
         setImage(weatherCondition: weather.weatherCondition)

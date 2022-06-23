@@ -15,18 +15,18 @@ struct WeatherModel {
         return dateFormatter
     }
     
-    func jsonString(request: WeatherRequest) throws -> String{
+    func jsonString(request: WeatherRequest) throws -> String {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(dateFormatter)
         let requestJsonValue = try encoder.encode(request)
-        guard let requestJsonString = String(bytes: requestJsonValue, encoding: .utf8) else{
+        guard let requestJsonString = String(data: requestJsonValue, encoding: .utf8) else {
             throw WeatherError.jsonEncodeError
         }
         return requestJsonString
     }
     
     func response(response: String) throws -> WeatherResponse {
-        guard let responseData = response.data(using: .utf8) else{
+        guard let responseData = response.data(using: .utf8) else {
             throw WeatherError.jsonDecodeError
         }
         let decoder = JSONDecoder()
