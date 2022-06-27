@@ -10,7 +10,16 @@ import YumemiWeather
 
 class WeatherViewController: UIViewController {
     
-    let weatherModel = WeatherModel()
+    var weatherModel: WeatherModel
+    
+    init?(weatherModel: WeatherModel, coder: NSCoder) {
+        self.weatherModel = weatherModel
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder){
+        fatalError("error")
+    }
     
     @IBOutlet weak var minTempLabel: UILabel!
     @IBOutlet weak var maxTempLabel: UILabel!

@@ -11,7 +11,7 @@ class InitialViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard let viewController = self.storyboard?.instantiateViewController(withIdentifier: "weatherViewController") else {
+        guard let viewController = self.storyboard?.instantiateViewController(identifier: "weatherViewController",creator:{ coder in WeatherViewController(weatherModel: WeatherModelImpl(), coder: coder)}) else {
             return
         }
         present(viewController, animated: true, completion: nil)
