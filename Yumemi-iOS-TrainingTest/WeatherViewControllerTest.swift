@@ -21,7 +21,7 @@ class MockWeatherModel: WeatherModel {
     }
 }
 
-class Yumemi_iOS_TrainingTests: XCTestCase {
+class WeatherViewControllerTest: XCTestCase {
     
     var viewController: WeatherViewController!
     let weatherModel = MockWeatherModel()
