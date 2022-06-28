@@ -19,10 +19,6 @@ class MockWeatherModel: WeatherModel {
         }
         return response
     }
-    
-    
-    
-    
 }
 
 class WeatherViewControllerTest: XCTestCase {
