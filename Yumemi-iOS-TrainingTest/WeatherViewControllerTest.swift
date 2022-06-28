@@ -12,13 +12,17 @@ import Yumemi_iOS_Training
 class MockWeatherModel: WeatherModel {
     
     var weatherResponse: (() throws -> WeatherResponse)?
-    
+
     func fetchWeather(area: String, date: Date) throws -> WeatherResponse {
         guard let response = try weatherResponse?() else {
             throw WeatherError.unknownError
         }
         return response
     }
+    
+    
+    
+    
 }
 
 class WeatherViewControllerTest: XCTestCase {
@@ -42,7 +46,8 @@ class WeatherViewControllerTest: XCTestCase {
         }
         
         viewController.didTapFetchWeatherButton(self)
-        
+
+        XCTAssertNotNil(viewController.weatherImageView.image)
         XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: "Sunny"))
     }
     
@@ -53,6 +58,7 @@ class WeatherViewControllerTest: XCTestCase {
         
         viewController.didTapFetchWeatherButton(self)
         
+        XCTAssertNotNil(viewController.weatherImageView.image)
         XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: "Cloudy"))
     }
     
@@ -63,26 +69,29 @@ class WeatherViewControllerTest: XCTestCase {
         
         viewController.didTapFetchWeatherButton(self)
         
+        XCTAssertNotNil(viewController.weatherImageView.image)
         XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: "Rainy"))
     }
     
     func testMaxTempLabel() {
         weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: .rainy, maxTemp: 0, minTemp: 0, date: Date())
+            WeatherResponse(weatherCondition: .rainy, maxTemp: 20, minTemp: 10, date: Date())
         }
         
         viewController.didTapFetchWeatherButton(self)
         
-        XCTAssertEqual(viewController.maxTempLabel.text, "0")
+        XCTAssertNotNil(viewController.minTempLabel.text)
+        XCTAssertEqual(viewController.maxTempLabel.text, "20")
     }
     
     func testMinTempLabel() {
         weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: .rainy, maxTemp: 0, minTemp: 0, date: Date())
+            WeatherResponse(weatherCondition: .rainy, maxTemp: 20, minTemp: 10, date: Date())
         }
         
         viewController.didTapFetchWeatherButton(self)
         
-        XCTAssertEqual(viewController.minTempLabel.text, "0")
+        XCTAssertNotNil(viewController.minTempLabel.text)
+        XCTAssertEqual(viewController.minTempLabel.text, "10")
     }
 }
