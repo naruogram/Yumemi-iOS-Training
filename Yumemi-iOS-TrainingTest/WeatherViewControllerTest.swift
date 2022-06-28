@@ -12,9 +12,10 @@ import Yumemi_iOS_Training
 class MockWeatherModel: WeatherModel {
     
     var weatherResponse: (() throws -> WeatherResponse)?
-
+    
     func fetchWeather(area: String, date: Date) throws -> WeatherResponse {
         guard let response = try weatherResponse?() else {
+            XCTFail("not found weather response")
             throw WeatherError.unknownError
         }
         return response
@@ -32,41 +33,19 @@ class WeatherViewControllerTest: XCTestCase {
         viewController = storyboard.instantiateViewController(identifier: "weatherViewController", creator: { coder in
             WeatherViewController(weatherModel: self.weatherModel, coder: coder)
         })
-        
         viewController.loadViewIfNeeded()
     }
     
     func testSunny() {
-        weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: .sunny, maxTemp: 0, minTemp: 0, date: Date())
-        }
-        
-        viewController.didTapFetchWeatherButton(self)
-
-        XCTAssertNotNil(viewController.weatherImageView.image)
-        XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: "Sunny"))
+        testWeatherCondition(weatherCondition: .sunny)
     }
     
     func testCloudy() {
-        weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: .cloudy, maxTemp: 0, minTemp: 0, date: Date())
-        }
-        
-        viewController.didTapFetchWeatherButton(self)
-        
-        XCTAssertNotNil(viewController.weatherImageView.image)
-        XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: "Cloudy"))
+        testWeatherCondition(weatherCondition: .cloudy)
     }
     
     func testRainy() {
-        weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: .rainy, maxTemp: 0, minTemp: 0, date: Date())
-        }
-        
-        viewController.didTapFetchWeatherButton(self)
-        
-        XCTAssertNotNil(viewController.weatherImageView.image)
-        XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: "Rainy"))
+        testWeatherCondition(weatherCondition: .rainy)
     }
     
     func testMaxTempLabel() {
@@ -89,5 +68,19 @@ class WeatherViewControllerTest: XCTestCase {
         
         XCTAssertNotNil(viewController.minTempLabel.text)
         XCTAssertEqual(viewController.minTempLabel.text, "10")
+    }
+}
+
+extension WeatherViewControllerTest {
+    
+    func testWeatherCondition(weatherCondition: WeatherCondition) {
+        weatherModel.weatherResponse = {
+            WeatherResponse(weatherCondition: weatherCondition, maxTemp: 0, minTemp: 0, date: Date())
+        }
+        
+        viewController.didTapFetchWeatherButton(self)
+        
+        XCTAssertNotNil(viewController.weatherImageView.image)
+        XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: weatherCondition.iconName))
     }
 }
