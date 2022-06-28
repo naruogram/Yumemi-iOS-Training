@@ -42,7 +42,7 @@ class WeatherModelImpl: WeatherModel {
     func fetchWeather(area: String, date: Date) throws -> WeatherResponse {
         let request = WeatherRequest(area: area, date: date)
         let jsonString = try jsonString(request: request)
-        let responseJson = try YumemiWeather.fetchWeather(jsonString)
+        let responseJson = try YumemiWeather.syncFetchWeather(jsonString)
         let response = try response(response: responseJson)
         return response
     }
