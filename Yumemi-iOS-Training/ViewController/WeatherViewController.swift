@@ -12,6 +12,9 @@ class WeatherViewController: UIViewController {
     
     var weatherModel: WeatherModel
     
+    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var reloadButton: UIButton!
+    
     init?(weatherModel: WeatherModel, coder: NSCoder) {
         self.weatherModel = weatherModel
         super.init(coder: coder)
@@ -26,11 +29,16 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherImageView: UIImageView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
-    var fetchWeatherButtonFlag:Bool = false
+    var isButtonEnabled: Bool = false {
+        didSet {
+            closeButton.isEnabled = isButtonEnabled
+            reloadButton.isEnabled = isButtonEnabled
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil) { [unowned self] notification in
             fetchWeather()
         }
@@ -43,7 +51,7 @@ class WeatherViewController: UIViewController {
     
     private func fetchWeather() {
         startLoadingAnimation()
-        fetchWeatherButtonFlag = true
+        isButtonEnabled = false
         weatherModel.fetchWeather(area: "tokyo", date: Date()) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -52,7 +60,7 @@ class WeatherViewController: UIViewController {
                 case .failure(_):
                     self.presentErrorAlertDialog()
                 }
-                self.fetchWeatherButtonFlag = false
+                self.isButtonEnabled = true
                 self.stopLoadingAnimation()
             }
         }
@@ -74,9 +82,7 @@ class WeatherViewController: UIViewController {
     }
     
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {
-        if(fetchWeatherButtonFlag==false){
-            fetchWeather()
-        }
+        fetchWeather()
     }
     
     @IBAction func didTapCloseButton(_ sender: Any) {

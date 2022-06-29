@@ -10,15 +10,15 @@ import XCTest
 import Yumemi_iOS_Training
 
 class MockWeatherModel: WeatherModel {
-    
     var weatherResponse: (() throws -> WeatherResponse)?
     
-    func fetchWeather(area: String, date: Date) throws -> WeatherResponse {
-        guard let response = try weatherResponse?() else {
-            XCTFail("not found weather response")
-            throw WeatherError.unknownError
+    func fetchWeather(area: String, date: Date, completion: @escaping (Result<WeatherResponse, WeatherError>) -> Void) {
+        guard let response = try? weatherResponse?() else {
+            XCTFail()
+            completion(.failure(.unknownError))
+            return
         }
-        return response
+        completion(.success(response))
     }
 }
 
@@ -49,22 +49,36 @@ class WeatherViewControllerTest: XCTestCase {
     }
     
     func testMaxTempLabel() {
-        weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: .rainy, maxTemp: 20, minTemp: 10, date: Date())
-        }
+        let expectetion = XCTestExpectation(description: "maxTempLabel")
+         weatherModel.weatherResponse = {
+             defer {
+                 DispatchQueue.main.async {
+                     expectetion.fulfill()
+                 }
+             }
+             return WeatherResponse(weatherCondition: .sunny, maxTemp: 20, minTemp: 10, date: Date())
+         }
         
         viewController.didTapFetchWeatherButton(self)
+        wait(for: [expectetion], timeout: 5)
         
-        XCTAssertNotNil(viewController.minTempLabel.text)
+        XCTAssertNotNil(viewController.maxTempLabel.text)
         XCTAssertEqual(viewController.maxTempLabel.text, "20")
     }
     
     func testMinTempLabel() {
-        weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: .rainy, maxTemp: 20, minTemp: 10, date: Date())
-        }
+        let expectetion = XCTestExpectation(description: "minTempLabel")
+         weatherModel.weatherResponse = {
+             defer {
+                 DispatchQueue.main.async {
+                     expectetion.fulfill()
+                 }
+             }
+             return WeatherResponse(weatherCondition: .sunny, maxTemp: 20, minTemp: 10, date: Date())
+         }
         
         viewController.didTapFetchWeatherButton(self)
+        wait(for: [expectetion], timeout: 5)
         
         XCTAssertNotNil(viewController.minTempLabel.text)
         XCTAssertEqual(viewController.minTempLabel.text, "10")
@@ -74,11 +88,18 @@ class WeatherViewControllerTest: XCTestCase {
 extension WeatherViewControllerTest {
     
     func testWeatherCondition(weatherCondition: WeatherCondition) {
-        weatherModel.weatherResponse = {
-            WeatherResponse(weatherCondition: weatherCondition, maxTemp: 0, minTemp: 0, date: Date())
-        }
+        let expectetion = XCTestExpectation(description: "weatherResponse")
+         weatherModel.weatherResponse = {
+             defer {
+                 DispatchQueue.main.async {
+                     expectetion.fulfill()
+                 }
+             }
+             return WeatherResponse(weatherCondition: weatherCondition, maxTemp: 0, minTemp: 0, date: Date())
+         }
         
         viewController.didTapFetchWeatherButton(self)
+        wait(for: [expectetion], timeout: 5)
         
         XCTAssertNotNil(viewController.weatherImageView.image)
         XCTAssertEqual(viewController.weatherImageView.image, UIImage(named: weatherCondition.iconName))

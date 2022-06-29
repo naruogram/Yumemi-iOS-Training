@@ -92,8 +92,10 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicatorView" destination="OmU-Gd-Cle" id="UyM-OU-m4w"/>
+                        <outlet property="closeButton" destination="hHD-BH-9UV" id="S7d-xs-BUF"/>
                         <outlet property="maxTempLabel" destination="f61-Xv-ICr" id="Rab-cX-GIu"/>
                         <outlet property="minTempLabel" destination="k36-MU-blM" id="OKL-lZ-UtY"/>
+                        <outlet property="reloadButton" destination="xIl-wN-FEE" id="1Ac-9B-KOC"/>
                         <outlet property="weatherImageView" destination="rni-2w-aom" id="7CL-Eh-G1o"/>
                     </connections>
                 </viewController>
