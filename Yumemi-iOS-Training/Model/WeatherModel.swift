@@ -9,7 +9,7 @@ import Foundation
 import YumemiWeather
 
 protocol WeatherModel {
-   func fetchWeather(area: String, date: Date) throws -> WeatherResponse
+    func fetchWeather(area: String, date: Date, completion: @escaping (Result<WeatherResponse, WeatherError>) -> Void)
 }
 
 class WeatherModelImpl: WeatherModel {
@@ -39,11 +39,18 @@ class WeatherModelImpl: WeatherModel {
         return responseResult
     }
     
-    func fetchWeather(area: String, date: Date) throws -> WeatherResponse {
-        let request = WeatherRequest(area: area, date: date)
-        let jsonString = try jsonString(request: request)
-        let responseJson = try YumemiWeather.syncFetchWeather(jsonString)
-        let response = try response(response: responseJson)
-        return response
+    func fetchWeather(area: String, date: Date, completion: @escaping (Result<WeatherResponse, WeatherError>) -> Void) {
+        DispatchQueue.global().async {
+            do {
+                let request = WeatherRequest(area: area, date: date)
+                let jsonString = try self.jsonString(request: request)
+                let responseJson = try YumemiWeather.syncFetchWeather(jsonString)
+                let response =  try self.response(response: responseJson)
+                completion(.success(response))
+            }
+            catch {
+                completion(.failure(WeatherError.jsonDecodeError))
+            }
+        }
     }
 }
