@@ -26,9 +26,11 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherImageView: UIImageView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
+    var fetchWeatherButtonFlag:Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil) { [unowned self] notification in
             fetchWeather()
         }
@@ -41,16 +43,17 @@ class WeatherViewController: UIViewController {
     
     private func fetchWeather() {
         startLoadingAnimation()
+        fetchWeatherButtonFlag = true
         weatherModel.fetchWeather(area: "tokyo", date: Date()) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
                     self.handleWeather(weather: response)
-                    self.stopLoadingAnimation()
                 case .failure(_):
                     self.presentErrorAlertDialog()
-                    self.stopLoadingAnimation()
                 }
+                self.fetchWeatherButtonFlag = false
+                self.stopLoadingAnimation()
             }
         }
     }
@@ -64,16 +67,16 @@ class WeatherViewController: UIViewController {
     
     private func startLoadingAnimation() {
         activityIndicatorView.startAnimating()
-        activityIndicatorView.isHidden = false
     }
     
     private func stopLoadingAnimation() {
         activityIndicatorView.stopAnimating()
-        activityIndicatorView.isHidden = true
     }
     
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {
-        fetchWeather()
+        if(fetchWeatherButtonFlag==false){
+            fetchWeather()
+        }
     }
     
     @IBAction func didTapCloseButton(_ sender: Any) {

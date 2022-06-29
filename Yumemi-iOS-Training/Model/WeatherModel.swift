@@ -49,7 +49,16 @@ class WeatherModelImpl: WeatherModel {
                 completion(.success(response))
             }
             catch {
-                completion(.failure(WeatherError.jsonDecodeError))
+                let weatherError: WeatherError
+                switch error {
+                case is EncodingError:
+                    weatherError = .jsonEncodeError
+                case is DecodingError:
+                    weatherError = .jsonDecodeError
+                default:
+                    weatherError = .unknownError
+                    completion(.failure(weatherError))
+                }
             }
         }
     }
