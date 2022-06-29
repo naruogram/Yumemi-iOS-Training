@@ -8,7 +8,11 @@
 import Foundation
 import YumemiWeather
 
-struct WeatherModel {
+protocol WeatherModel {
+   func fetchWeather(area: String, date: Date) throws -> WeatherResponse
+}
+
+class WeatherModelImpl: WeatherModel {
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
