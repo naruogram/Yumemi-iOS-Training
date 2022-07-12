@@ -72,6 +72,9 @@
                                     <action selector="didTapFetchWeatherButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iI7-oW-grv"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="OmU-Gd-Cle">
+                                <rect key="frame" x="197" y="580.5" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -79,21 +82,26 @@
                             <constraint firstItem="rni-2w-aom" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.5" id="1SN-vZ-2xw"/>
                             <constraint firstItem="bMS-hg-Y0M" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="25y-rj-kts"/>
                             <constraint firstItem="bMS-hg-Y0M" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="2iH-dY-ILv"/>
+                            <constraint firstItem="OmU-Gd-Cle" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Xjn-nd-r4h"/>
                             <constraint firstItem="xIl-wN-FEE" firstAttribute="centerX" secondItem="f61-Xv-ICr" secondAttribute="centerX" id="YSn-Re-8NX"/>
                             <constraint firstItem="hHD-BH-9UV" firstAttribute="centerX" secondItem="k36-MU-blM" secondAttribute="centerX" id="hty-Wy-gkj"/>
                             <constraint firstItem="hHD-BH-9UV" firstAttribute="top" secondItem="k36-MU-blM" secondAttribute="bottom" constant="80" id="iRv-0R-4s1"/>
                             <constraint firstItem="xIl-wN-FEE" firstAttribute="top" secondItem="f61-Xv-ICr" secondAttribute="bottom" constant="80" id="kX0-sV-zlz"/>
+                            <constraint firstItem="OmU-Gd-Cle" firstAttribute="top" secondItem="rni-2w-aom" secondAttribute="bottom" constant="50" id="smM-42-sMR"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="OmU-Gd-Cle" id="UyM-OU-m4w"/>
+                        <outlet property="closeButton" destination="hHD-BH-9UV" id="S7d-xs-BUF"/>
                         <outlet property="maxTempLabel" destination="f61-Xv-ICr" id="Rab-cX-GIu"/>
                         <outlet property="minTempLabel" destination="k36-MU-blM" id="OKL-lZ-UtY"/>
+                        <outlet property="reloadButton" destination="xIl-wN-FEE" id="1Ac-9B-KOC"/>
                         <outlet property="weatherImageView" destination="rni-2w-aom" id="7CL-Eh-G1o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="20" y="98"/>
+            <point key="canvasLocation" x="18.840579710144929" y="97.767857142857139"/>
         </scene>
         <!--Initial View Controller-->
         <scene sceneID="E8P-CC-A4Y">

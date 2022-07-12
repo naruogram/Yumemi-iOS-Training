@@ -12,6 +12,9 @@ class WeatherViewController: UIViewController {
     
     var weatherModel: WeatherModel
     
+    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var reloadButton: UIButton!
+    
     init?(weatherModel: WeatherModel, coder: NSCoder) {
         self.weatherModel = weatherModel
         super.init(coder: coder)
@@ -24,9 +27,18 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var minTempLabel: UILabel!
     @IBOutlet weak var maxTempLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    
+    var isButtonEnabled: Bool = false {
+        didSet {
+            closeButton.isEnabled = isButtonEnabled
+            reloadButton.isEnabled = isButtonEnabled
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil) { [unowned self] notification in
             fetchWeather()
         }
@@ -38,19 +50,35 @@ class WeatherViewController: UIViewController {
     }
     
     private func fetchWeather() {
-        do {
-            let weather = try weatherModel.fetchWeather(area: "tokyo", date: Date())
-            handleWeather(weather: weather)
-        }
-        catch {
-            presentErrorAlertDialog()
+        startLoadingAnimation()
+        isButtonEnabled = false
+        weatherModel.fetchWeather(area: "tokyo", date: Date()) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    self.handleWeather(weather: response)
+                case .failure(_):
+                    self.presentErrorAlertDialog()
+                }
+                self.isButtonEnabled = true
+                self.stopLoadingAnimation()
+            }
         }
     }
+    
     
     private func handleWeather(weather: WeatherResponse) {
         minTempLabel.text = weather.minTemp.description
         maxTempLabel.text = weather.maxTemp.description
         setImage(weatherCondition: weather.weatherCondition)
+    }
+    
+    private func startLoadingAnimation() {
+        activityIndicatorView.startAnimating()
+    }
+    
+    private func stopLoadingAnimation() {
+        activityIndicatorView.stopAnimating()
     }
     
     @IBAction func didTapFetchWeatherButton(_ sender: Any) {
