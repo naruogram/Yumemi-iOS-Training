@@ -1,0 +1,21 @@
+name: Assign yutu team
+
+on:
+  pull_request:
+    types: [opened]
+
+env:
+  ISSUE_TITLE: naruogramさんの研修PR
+
+jobs:
+  assign:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Assing yutu team
+        run: |
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/yumemi/yutu-tasks/actions/workflows/create-new-issue.yaml/dispatches \
+            -d '{ "ref": "main", "inputs": { "titile": "${{ env.ISSUE_TITLE }}", "body": "${{ github.event.pull_request.title }}\nhttps://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}", "labels": "[研修PRレビュー]" } }'
